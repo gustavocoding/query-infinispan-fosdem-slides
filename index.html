@@ -41,12 +41,11 @@
 
     <!-- Any section element inside of this container is displayed as a slide -->
     <div class="slides">
-        <section data-background="http://static.comicvine.com/uploads/original/3/33224/669226-borg_cube_00340.jpg">
-            <h2>Querying your Datagrid with Lucene, Hadoop and Spark</h2>
+        <section data-background="img/cube.jpg">
+            <h2 style="color: #ffffff">Querying your Datagrid with Lucene, Hadoop and Spark</h2>
 
-            <p>
-                <small><b>Gustavo Fernandes / <a href="http://twitter.com/hakimel">gustavo@redhat.com</a></b></small>
-            </p>
+                <b style="color: #ffffff">Gustavo Fernandes / gustavo@redhat.com</b>
+
         </section>
 
         <section>
@@ -63,7 +62,7 @@
         <section>
             <h2>HashMap</h2>
             <p>
-                <img src="http://4.bp.blogspot.com/-unPwpp8AJTA/U0e9S0F5ljI/AAAAAAAAAUo/xMnUVRO5fyY/s1600/how+hashmap+works+internally+in+java+.png"/>
+                <img src="img/hashmap.png"/>
             </p>
         </section>
 
@@ -370,14 +369,11 @@ public class DaySummary  {
     @Field(store = Store.YES)
     Float avgTemp;
             </code></pre>
-            <pre class="fragment"><code>
-Document
+            <pre class="fragment"><code>Document
      Field("station.name")
      Field("station.usaf")
      NumericField("year", Stored.YES, Indexed.NO)
-     NumericField("month", Stored.YES, Indexed.NO)
-     NumericField("month", Stored.YES, Indexed.NO)
-               </code></pre>
+     NumericField("month", Stored.YES, Indexed.NO)</code></pre>
         </section>
 
         <section>
@@ -390,7 +386,6 @@ Document
       @TokenFilterDef(factory = LowerCaseFilterFactory.class)
    }
 )
-@SerializeWith(CountryExternalizer.class)
 public class Country {
 
     @Analyzer(definition = "lowercaseKeyword")
@@ -407,11 +402,13 @@ public class Country {
             <h2>Using Lucene Query Parser</h2>
             <pre><code class="java" style="max-width: 100%">
 QueryParser qp = new QueryParser("default", new StandardAnalyzer());
+                
 Query luceneQ = qp
  .parse("+station.name:airport +year:2014 +month:12 +(avgTemp < 0)");
 
 CacheQuery cq = Search.getSearchManager(cache)
                            .getQuery(luceneQ, DaySummary.class);
+                
  List&lt;Object&gt; results = query.list();
             </code></pre>
         </section>
@@ -422,6 +419,7 @@ CacheQuery cq = Search.getSearchManager(cache)
 import org.apache.lucene.search.MatchAllDocsQuery;
 
 MatchAllDocsQuery allDocsQuery = new MatchAllDocsQuery();
+                
 CacheQuery query = Search.getSearchManager(cache) 
                              .getQuery(allDocsQuery, DaySummary.class);
                 
@@ -445,9 +443,10 @@ IndexSearcher searcher = new IndexSearcher(indexReader);
         <section>
             <h2><a href="http://localhost:8080/">Demo</a></h2>
             <ul>
-                <li>Indexed Cache&lt;Integer, DaySummary&gt;</li>
+                <li>Indexed <pre><code>Cache&lt;Integer, DaySummary&gt;</code></pre></li>
                 <li>NOAA.gov data from 1901 to 2014</li>
                 <li>~10M summaries</li>
+                <li>Yearly country max recorded temperature by month</li>
             </ul>
         </section>
 
@@ -485,12 +484,12 @@ JobClient.runJob(jobConf);
         </section>
 
         <section>
-            <h2>Demo II</h2>
+            <h2>Demo</h2>
             <ul>
                 <li>Docker: Infinispan Server cluster + Spark Cluster</li>
                 <li>Java HotRod client inserting data</li>
-                <li>Word count mapreduce</li>
-                <li>Spark</li>
+                <li>Hadoop RDD with Infinispan Input/Output Format</li>
+                <li>Wordcount mapreduce</li>
             </ul>
         </section>
 
@@ -499,7 +498,7 @@ JobClient.runJob(jobConf);
             <ul>
                 <li>Performance</li>
                 <li>Input Split Configuration</li>
-                <li>Native Spark connector</li>
+                <li>Spark connector</li>
             </ul>
         </section>
 
